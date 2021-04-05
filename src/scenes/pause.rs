@@ -8,7 +8,7 @@ use tetra::{Context, Event};
 
 #[derive(Debug, Default)]
 pub struct PauseScene {
-    pub resume: bool,
+    resume: bool,
 }
 
 impl PauseScene {

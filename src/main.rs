@@ -1,8 +1,11 @@
+#![warn(missing_debug_implementations)]
+
 use crate::state::MainState;
 use tetra::ContextBuilder;
 
 mod components;
 mod egui;
+mod entities;
 mod scenes;
 mod state;
 mod systems;

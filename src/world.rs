@@ -1,3 +1,4 @@
+use crate::components::TextureFile;
 use hecs::World;
 use std::collections::HashMap;
 use tetra::graphics::Texture;
@@ -6,7 +7,7 @@ use tetra::graphics::Texture;
 #[derive(Default)]
 pub struct GameWorld {
     pub ecs: World,
-    pub textures: HashMap<String, Texture>,
+    pub textures: HashMap<TextureFile, Texture>,
 }
 
 impl GameWorld {

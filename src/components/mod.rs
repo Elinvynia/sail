@@ -4,5 +4,5 @@ mod player;
 pub use player::Player;
 mod position;
 pub use position::Position;
-mod texture;
-pub use texture::Texture;
+mod sprite;
+pub use sprite::{Sprite, TextureFile};

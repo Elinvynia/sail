@@ -6,8 +6,9 @@ edition = "2018"
 
 [dependencies]
 tetra = "0.6"
-hecs = "0.3"
+hecs = "0.5"
 egui = "0.10"
+rand = "0.8"
 
 # Data
 ron = "0.6"

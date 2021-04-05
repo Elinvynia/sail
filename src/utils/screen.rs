@@ -12,7 +12,6 @@ pub fn center(ctx: &Context, size: Vec2) -> Rect {
     Rect::from_min_size(top_left, size)
 }
 
-#[allow(dead_code)]
 // Give it the center position and size of the element.
 pub fn position(center_pos: Pos2, size: Vec2) -> Rect {
     let top_left = pos2(center_pos.x - (size.x / 2.0), center_pos.y - (size.y / 2.0));
