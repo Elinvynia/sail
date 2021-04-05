@@ -1,7 +1,7 @@
-mod name;
-pub use name::Name;
-mod player;
-pub use player::Player;
+mod info;
+pub use info::Info;
+mod marker;
+pub use marker::Hoverable;
 mod position;
 pub use position::Position;
 mod sprite;

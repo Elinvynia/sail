@@ -16,15 +16,20 @@ use tetra::{Context, Event};
 pub struct GameScene {
     pause: bool,
     camera: Camera,
+    width: i32,
+    height: i32,
 }
 
 impl GameScene {
     pub fn new(world: &mut GameWorld, ctx: &mut Context) -> Self {
+        let (width, height) = get_size(ctx);
+
         let mut x = 0;
         let mut y = 0;
 
-        for _ in 0..10 {
-            for _ in 0..10 {
+        for _ in 0..26 {
+            x = 0;
+            for _ in 0..50 {
                 let mut builder = EntityBuilder::new();
                 let pos = Position::new(x, y, 0);
                 let sea = sea();
@@ -35,16 +40,19 @@ impl GameScene {
                 world.ecs.spawn(entity);
                 x += 32;
             }
-            x = 0;
             y += 32;
         }
 
         let mut camera = Camera::with_window_size(ctx);
-        let (width, height) = get_size(ctx).into();
-        camera.position = [width as f32 / 3.0, height as f32 / 3.0].into();
+        camera.position = [width as f32 / 2.0, height as f32 / 2.0].into();
         camera.update();
 
-        GameScene { pause: false, camera }
+        GameScene {
+            pause: false,
+            camera,
+            width: x as i32,
+            height: y as i32,
+        }
     }
 }
 
@@ -58,11 +66,32 @@ impl Scene for GameScene {
 
         for key in get_keys_down(ctx) {
             if let Some(dir) = key_to_dir(key) {
+                let (width, height) = get_size(ctx);
                 match dir {
-                    Dir::Up => self.camera.position.y -= 5.0,
-                    Dir::Down => self.camera.position.y += 5.0,
-                    Dir::Left => self.camera.position.x -= 5.0,
-                    Dir::Right => self.camera.position.x += 5.0,
+                    Dir::Up => {
+                        let top = self.camera.position.y - (height / 2) as f32;
+                        if top - 5.0 > 0.0 {
+                            self.camera.position.y -= 5.0;
+                        }
+                    }
+                    Dir::Down => {
+                        let bottom = self.camera.position.y + (height / 2) as f32;
+                        if bottom + 5.0 < self.height as f32 {
+                            self.camera.position.y += 5.0;
+                        }
+                    }
+                    Dir::Left => {
+                        let left = self.camera.position.x - (width / 2) as f32;
+                        if left - 5.0 > 0.0 {
+                            self.camera.position.x -= 5.0;
+                        }
+                    }
+                    Dir::Right => {
+                        let right = self.camera.position.x + (width / 2) as f32;
+                        if right + 5.0 < self.width as f32 {
+                            self.camera.position.x += 5.0;
+                        }
+                    }
                 }
 
                 self.camera.update();
@@ -77,7 +106,7 @@ impl Scene for GameScene {
         render_system(ctx, world);
         hover_system(ctx, ectx, world);
 
-        let rect = position(pos2(-100.0, 100.0), vec2(100.0, 150.0));
+        let rect = position(pos2(100.0, 100.0), vec2(100.0, 150.0));
         Window::new("info")
             .resizable(false)
             .collapsible(false)
