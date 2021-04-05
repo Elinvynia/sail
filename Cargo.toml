@@ -1,0 +1,32 @@
+[package]
+name = "sail"
+version = "0.1.0"
+authors = ["Elinvynia <59487684+Elinvynia@users.noreply.github.com>"]
+edition = "2018"
+
+[dependencies]
+tetra = "0.6"
+hecs = "0.3"
+egui = "0.10"
+
+# Data
+ron = "0.6"
+serde = "1.0"
+
+# Config
+config = "0.10"
+dotenv = "0.15"
+
+# Logging
+log = "0.4"
+env_logger = "0.8"
+
+[features]
+default = []
+static = ["tetra/sdl2_static_link"]
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.dev]
+opt-level = 1

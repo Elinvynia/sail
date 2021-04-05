@@ -1,0 +1,65 @@
+name: Rust
+on:
+  push:
+    branches:
+    - master
+    paths:
+      - "**.rs"
+      - "**Cargo.lock"
+      - "**Cargo.toml"
+  pull_request:
+    branches:
+    - master
+    paths:
+    - "**.rs"
+    - "**Cargo.lock"
+    - "**Cargo.toml"
+
+jobs:
+  clippy:
+    needs: format
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install dependencies
+      run: sudo apt install libasound2-dev libudev-dev pkg-config libsdl2-dev
+      shell: bash
+    - uses: actions/checkout@v2
+    - uses: Swatinem/rust-cache@v1
+    - run: cargo clippy
+
+  stable:
+    needs: format
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install dependencies
+      run: sudo apt install libasound2-dev libudev-dev pkg-config libsdl2-dev
+      shell: bash
+    - uses: actions/checkout@v2
+    - uses: Swatinem/rust-cache@v1
+    - run: cargo test
+
+  nightly:
+    needs: format
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install dependencies
+      run: sudo apt install libasound2-dev libudev-dev pkg-config libsdl2-dev
+      shell: bash
+    - uses: actions/checkout@v2
+    - run: rustup default nightly-2021-03-20
+    - uses: Swatinem/rust-cache@v1
+    - run: cargo test
+
+  windows:
+    needs: format
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: Swatinem/rust-cache@v1
+    - run: cargo test
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: cargo fmt -- --check
