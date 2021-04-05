@@ -6,6 +6,7 @@ pub struct Sprite {
     pub textures: Vec<TextureFile>,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum TextureFile {
     Player,

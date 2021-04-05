@@ -6,6 +6,7 @@ use tetra::ContextBuilder;
 mod components;
 mod egui;
 mod entities;
+mod input;
 mod scenes;
 mod state;
 mod systems;
