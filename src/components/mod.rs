@@ -1,7 +1,9 @@
 mod info;
 pub use info::Info;
 mod marker;
-pub use marker::Hoverable;
+pub use marker::{Hoverable, Player};
+mod money;
+pub use money::Money;
 mod position;
 pub use position::Position;
 mod sprite;

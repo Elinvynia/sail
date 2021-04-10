@@ -1,4 +1,6 @@
-pub mod map;
+mod map;
 pub use map::generate_map;
-pub mod tile;
+mod player;
+pub use player::player;
+mod tile;
 pub use tile::{island, sea};

@@ -1,10 +1,12 @@
-use crate::entities::generate_map;
+use crate::components::Position;
+use crate::entities::{generate_map, player};
 use crate::input::{key_to_dir, Dir};
 use crate::scenes::{PauseScene, Scene, SceneSwitch, Scenes};
-use crate::systems::{hover_system, render_system};
+use crate::systems::{get_player_money, hover_system, render_system};
 use crate::utils::{position, TILE_SIZE};
 use crate::world::GameWorld;
-use egui::{pos2, vec2, CtxRef, Window};
+use egui::{pos2, vec2, CtxRef, TextureId, Window};
+use hecs::EntityBuilder;
 use tetra::graphics::{set_transform_matrix, Camera};
 use tetra::input::{get_keys_down, Key};
 use tetra::window::get_size;
@@ -24,6 +26,15 @@ impl GameScene {
         let (map_width, map_height) = (58, 28);
 
         generate_map(map_width, map_height, world);
+
+        let position = Position::new(64, 64, 2);
+        let player = player();
+
+        let mut builder = EntityBuilder::new();
+        builder.add(position);
+        builder.add_bundle(player);
+
+        world.ecs.spawn(builder.build());
 
         let mut camera = Camera::with_window_size(ctx);
         camera.position = [width as f32 / 2.0, height as f32 / 2.0].into();
@@ -88,12 +99,20 @@ impl Scene for GameScene {
         render_system(ctx, world);
         hover_system(ctx, ectx, world);
 
-        let rect = position(pos2(100.0, 100.0), vec2(100.0, 150.0));
-        Window::new("info")
+        let top = self.camera.position.y - (self.height / 2) as f32 + 100.0;
+        let left = self.camera.position.x - (self.width / 2) as f32 + 300.0;
+
+        let rect = position(pos2(left + 100.0, top + 100.0), vec2(150.0, 100.0));
+        Window::new("Information")
             .resizable(false)
             .collapsible(false)
             .fixed_rect(rect)
             .show(ectx, |ui| {
+                ui.horizontal(|ui| {
+                    ui.image(TextureId::User(1), vec2(32.0, 32.0));
+                    let money = get_player_money(world);
+                    ui.label(format!("Money: {}", money));
+                });
                 ui.label("Useful information here.");
             });
 
