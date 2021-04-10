@@ -21,8 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Install dependencies
-      run: sudo apt install libasound2-dev libudev-dev pkg-config libsdl2-dev
-      shell: bash
+      run: |
+        sudo apt update
+        sudo apt install libasound2-dev libudev-dev pkg-config libsdl2-dev
     - uses: actions/checkout@v2
     - uses: Swatinem/rust-cache@v1
     - run: cargo clippy
@@ -32,8 +33,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Install dependencies
-      run: sudo apt install libasound2-dev libudev-dev pkg-config libsdl2-dev
-      shell: bash
+      run: |
+        sudo apt update
+        sudo apt install libasound2-dev libudev-dev pkg-config libsdl2-dev
     - uses: actions/checkout@v2
     - uses: Swatinem/rust-cache@v1
     - run: cargo test
@@ -43,8 +45,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Install dependencies
-      run: sudo apt install libasound2-dev libudev-dev pkg-config libsdl2-dev
-      shell: bash
+      run: |
+        sudo apt update
+        sudo apt install libasound2-dev libudev-dev pkg-config libsdl2-dev
     - uses: actions/checkout@v2
     - run: rustup default nightly-2021-03-20
     - uses: Swatinem/rust-cache@v1
