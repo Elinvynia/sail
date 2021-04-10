@@ -1,13 +1,10 @@
-use crate::components::{Hoverable, Position};
-use crate::entities::{island, sea};
+use crate::entities::generate_map;
 use crate::input::{key_to_dir, Dir};
 use crate::scenes::{PauseScene, Scene, SceneSwitch, Scenes};
 use crate::systems::{hover_system, render_system};
 use crate::utils::{position, TILE_SIZE};
 use crate::world::GameWorld;
 use egui::{pos2, vec2, CtxRef, Window};
-use hecs::EntityBuilder;
-use rand::prelude::*;
 use tetra::graphics::{set_transform_matrix, Camera};
 use tetra::input::{get_keys_down, Key};
 use tetra::window::get_size;
@@ -24,34 +21,9 @@ pub struct GameScene {
 impl GameScene {
     pub fn new(world: &mut GameWorld, ctx: &mut Context) -> Self {
         let (width, height) = get_size(ctx);
-        let mut rng = thread_rng();
+        let (map_width, map_height) = (58, 28);
 
-        let mut x = 0;
-        let mut y = 0;
-
-        for _ in 0..26 {
-            x = 0;
-            for _ in 0..50 {
-                let mut builder = EntityBuilder::new();
-                let pos = Position::new(x, y, 0);
-
-                if (0..100).choose(&mut rng).unwrap() > 95 {
-                    let island = island();
-                    builder.add(Hoverable);
-                    builder.add_bundle(island);
-                } else {
-                    let sea = sea();
-                    builder.add_bundle(sea);
-                }
-
-                builder.add(pos);
-                let entity = builder.build();
-                world.ecs.spawn(entity);
-
-                x += TILE_SIZE as u32;
-            }
-            y += TILE_SIZE as u32;
-        }
+        generate_map(map_width, map_height, world);
 
         let mut camera = Camera::with_window_size(ctx);
         camera.position = [width as f32 / 2.0, height as f32 / 2.0].into();
@@ -60,8 +32,8 @@ impl GameScene {
         GameScene {
             pause: false,
             camera,
-            width: x as i32,
-            height: y as i32,
+            width: (map_width * TILE_SIZE) as i32,
+            height: (map_height * TILE_SIZE) as i32,
         }
     }
 }
