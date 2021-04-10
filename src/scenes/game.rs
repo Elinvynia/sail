@@ -3,7 +3,7 @@ use crate::entities::sea;
 use crate::input::{key_to_dir, Dir};
 use crate::scenes::{PauseScene, Scene, SceneSwitch, Scenes};
 use crate::systems::{hover_system, render_system};
-use crate::utils::position;
+use crate::utils::{position, TILE_SIZE};
 use crate::world::GameWorld;
 use egui::{pos2, vec2, CtxRef, Window};
 use hecs::EntityBuilder;
@@ -38,9 +38,9 @@ impl GameScene {
                 builder.add_bundle(sea);
                 let entity = builder.build();
                 world.ecs.spawn(entity);
-                x += 32;
+                x += TILE_SIZE as u32;
             }
-            y += 32;
+            y += TILE_SIZE as u32;
         }
 
         let mut camera = Camera::with_window_size(ctx);

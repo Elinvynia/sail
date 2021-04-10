@@ -1,4 +1,5 @@
 use crate::components::{Hoverable, Info, Position};
+use crate::utils::TILE_SIZE;
 use crate::world::GameWorld;
 use egui::{pos2, CtxRef, Id, Rect, Window};
 use tetra::input::{get_mouse_position, is_key_down, Key};
@@ -12,7 +13,9 @@ pub fn hover_system(ctx: &mut Context, ectx: &mut CtxRef, world: &mut GameWorld)
             continue;
         }
 
-        let rect = Rect::from_min_size(pos2(position.x as f32, position.y as f32), (32.0, 32.0).into());
+        let pos = (position.x as f32, position.y as f32);
+        let size = TILE_SIZE as f32;
+        let rect = Rect::from_min_size(pos2(pos.0, pos.1), (size, size).into());
         if !rect.contains(pos2(mouse_pos.x, mouse_pos.y)) {
             continue;
         }
