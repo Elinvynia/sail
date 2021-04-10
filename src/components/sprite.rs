@@ -6,6 +6,12 @@ pub struct Sprite {
     pub textures: Vec<TextureFile>,
 }
 
+impl Sprite {
+    pub fn new(textures: Vec<TextureFile>) -> Self {
+        Sprite { textures }
+    }
+}
+
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum TextureFile {

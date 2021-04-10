@@ -11,9 +11,7 @@ pub fn sea() -> impl Bundle {
         _ => unreachable!(),
     };
 
-    (Sprite {
-        textures: vec![TextureFile::Sea, waves],
-    },)
+    (Sprite::new(vec![TextureFile::Sea, waves]),)
 }
 
 const ISLAND_ADJECTIVES: [&str; 1] = ["Deadly"];
@@ -26,10 +24,9 @@ pub fn island() -> impl Bundle {
         ISLAND_ADJECTIVES.choose(&mut rng).unwrap(),
         ISLAND_NOUNS.choose(&mut rng).unwrap()
     );
+
     (
         Info::new(&name, "You can trade here!"),
-        Sprite {
-            textures: vec![TextureFile::Island],
-        },
+        Sprite::new(vec![TextureFile::Island]),
     )
 }
