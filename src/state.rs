@@ -41,7 +41,7 @@ impl State for MainState {
         self.input.time = new;
         self.scenes.draw(ctx, &mut self.egui)?;
         let (_output, shapes) = self.egui.end_frame();
-        render_ui(ctx, &mut self.egui, shapes);
+        render_ui(ctx, &mut self.egui, &mut self.scenes.world.egui_cache, shapes);
 
         Ok(())
     }

@@ -2,17 +2,18 @@ use crate::get_assets_folder;
 use egui::paint::ClippedShape;
 use egui::{ClippedMesh, CtxRef, Event, Modifiers, Pos2, RawInput};
 use egui::{PointerButton, Texture as ETexture, TextureId, Vec2 as EVec2};
-use tetra::graphics::mesh::{IndexBuffer, Vertex, VertexBuffer, VertexWinding};
+use tetra::graphics::mesh::{IndexBuffer, Vertex, VertexBuffer, VertexWinding, Mesh};
 use tetra::graphics::{Color, DrawParams, Texture};
 use tetra::input::*;
 use tetra::math::Vec2;
 use tetra::{Context, Event as TEvent};
+use std::collections::HashMap;
 
 // Paint the frame.
-pub fn render_ui(ctx: &mut Context, ectx: &mut CtxRef, shapes: Vec<ClippedShape>) {
+pub fn render_ui(ctx: &mut Context, ectx: &mut CtxRef, cache: &mut HashMap<String, Mesh>, shapes: Vec<ClippedShape>) {
     let texture = ectx.texture();
     let clipped_meshes = ectx.tessellate(shapes);
-    paint(ctx, clipped_meshes, texture.as_ref());
+    paint(ctx, clipped_meshes, texture.as_ref(), cache);
 }
 
 // Process tetra Events into egui Events
@@ -100,13 +101,17 @@ pub fn handle_event(ctx: &mut Context, ri: &mut RawInput, event: &TEvent) {
 }
 
 // Paint the GUI using tetra.
-// TODO: Optimize.
-pub fn paint(ctx: &mut Context, meshes: Vec<ClippedMesh>, texture: &ETexture) {
+pub fn paint(ctx: &mut Context, meshes: Vec<ClippedMesh>, texture: &ETexture, cache: &mut HashMap<String, Mesh>) {
     for cm in meshes.into_iter() {
+        if let Some(m) = cache.get(&format!("{:?}", cm)) {
+            m.draw(ctx, DrawParams::default());
+            continue;
+        }
+
         let mut verts = vec![];
 
         // Convert egui::Vertex into tetra::Vertex
-        for v in cm.1.vertices.into_iter() {
+        for v in cm.1.vertices.iter() {
             let c = v.color.to_tuple();
             let vert = Vertex {
                 position: Vec2::new(v.pos.x, v.pos.y),
@@ -134,7 +139,7 @@ pub fn paint(ctx: &mut Context, meshes: Vec<ClippedMesh>, texture: &ETexture) {
         let tex = if let TextureId::User(x) = cm.1.texture_id {
             let assets_folder = get_assets_folder();
             let name = match x {
-                1 => "player.png",
+                1 => "gold.png",
                 _ => "unimplemented.png",
             };
             Texture::new(ctx, assets_folder + name).unwrap()
@@ -149,6 +154,8 @@ pub fn paint(ctx: &mut Context, meshes: Vec<ClippedMesh>, texture: &ETexture) {
         mesh.set_front_face_winding(VertexWinding::Clockwise);
         mesh.set_texture(tex);
         mesh.draw(ctx, DrawParams::default());
+
+        cache.insert(format!("{:?}", cm), mesh);
     }
 }
 

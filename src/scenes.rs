@@ -13,7 +13,7 @@ pub use pause::PauseScene;
 
 // Holds the stack of scenes and takes care of actual logic.
 pub struct SceneStack {
-    world: GameWorld,
+    pub(crate) world: GameWorld,
     scenes: Vec<Scenes>,
 }
 
