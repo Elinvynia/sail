@@ -15,6 +15,7 @@ pub enum TextureFile {
     Waves1,
     Waves2,
     Waves3,
+    Island,
 }
 
 impl fmt::Display for TextureFile {
@@ -29,6 +30,7 @@ impl fmt::Display for TextureFile {
             Waves1 => "waves-1.png",
             Waves2 => "waves-2.png",
             Waves3 => "waves-3.png",
+            Island => "island.png",
         };
 
         write!(f, "{}{}", folder, file)

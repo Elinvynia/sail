@@ -2,12 +2,12 @@ use crate::get_assets_folder;
 use egui::paint::ClippedShape;
 use egui::{ClippedMesh, CtxRef, Event, Modifiers, Pos2, RawInput};
 use egui::{PointerButton, Texture as ETexture, TextureId, Vec2 as EVec2};
-use tetra::graphics::mesh::{IndexBuffer, Vertex, VertexBuffer, VertexWinding, Mesh};
+use std::collections::HashMap;
+use tetra::graphics::mesh::{IndexBuffer, Mesh, Vertex, VertexBuffer, VertexWinding};
 use tetra::graphics::{Color, DrawParams, Texture};
 use tetra::input::*;
 use tetra::math::Vec2;
 use tetra::{Context, Event as TEvent};
-use std::collections::HashMap;
 
 // Paint the frame.
 pub fn render_ui(ctx: &mut Context, ectx: &mut CtxRef, cache: &mut HashMap<String, Mesh>, shapes: Vec<ClippedShape>) {

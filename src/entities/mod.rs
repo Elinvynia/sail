@@ -1,2 +1,2 @@
 pub mod tile;
-pub use tile::sea;
+pub use tile::{island, sea};

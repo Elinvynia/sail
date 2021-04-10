@@ -1,8 +1,8 @@
 use crate::components::TextureFile;
 use hecs::World;
 use std::collections::HashMap;
-use tetra::graphics::Texture;
 use tetra::graphics::mesh::Mesh;
+use tetra::graphics::Texture;
 
 // Mutable global state, used in every scene.
 #[derive(Default)]
