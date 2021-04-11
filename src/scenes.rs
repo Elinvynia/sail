@@ -69,6 +69,12 @@ impl SceneStack {
                 let _ = self.pop();
                 self.push(s);
             }
+            SceneSwitch::ReplaceAll(s) => {
+                for _ in 0..self.scenes.len() {
+                    let _ = self.pop();
+                }
+                self.push(s);
+            }
         };
         Ok(())
     }
@@ -96,6 +102,7 @@ pub enum SceneSwitch {
     None,
     Push(Scenes),
     Replace(Scenes),
+    ReplaceAll(Scenes),
     Pop,
 }
 

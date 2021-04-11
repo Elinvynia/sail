@@ -1,4 +1,4 @@
-use crate::scenes::{Scene, SceneSwitch};
+use crate::scenes::{Scene, SceneSwitch, Scenes, MenuScene};
 use crate::utils::center;
 use crate::world::GameWorld;
 use egui::*;
@@ -9,6 +9,7 @@ use tetra::{Context, Event};
 #[derive(Debug, Default)]
 pub struct PauseScene {
     resume: bool,
+    quit: bool,
 }
 
 impl PauseScene {
@@ -18,9 +19,13 @@ impl PauseScene {
 }
 
 impl Scene for PauseScene {
-    fn update(&mut self, _world: &mut GameWorld, _ctx: &mut Context) -> tetra::Result<SceneSwitch> {
+    fn update(&mut self, world: &mut GameWorld, ctx: &mut Context) -> tetra::Result<SceneSwitch> {
         if self.resume {
             return Ok(SceneSwitch::Pop);
+        }
+
+        if self.quit {
+            return Ok(SceneSwitch::ReplaceAll(Scenes::Menu(MenuScene::new(world, ctx))));
         }
 
         Ok(SceneSwitch::None)
@@ -38,10 +43,15 @@ impl Scene for PauseScene {
             .show(ectx, |ui| {
                 ui.vertical_centered_justified(|ui| {
                     let back = ui.add(Button::new("Back"));
-
                     if back.clicked() {
                         info!("Clicked back");
                         self.resume = true;
+                    }
+
+                    let quit = ui.add(Button::new("Quit"));
+                    if quit.clicked() {
+                        info!("Clicked quit");
+                        self.quit = true;
                     }
                 });
             });
