@@ -1,8 +1,10 @@
-use crate::get_assets_folder;
+use crate::components::TextureFile;
+use crate::utils::CustomTexture;
 use egui::paint::ClippedShape;
 use egui::{ClippedMesh, CtxRef, Event, Modifiers, Pos2, RawInput};
 use egui::{PointerButton, Texture as ETexture, TextureId, Vec2 as EVec2};
 use std::collections::HashMap;
+use std::convert::TryFrom;
 use tetra::graphics::mesh::{IndexBuffer, Mesh, Vertex, VertexBuffer, VertexWinding};
 use tetra::graphics::{Color, DrawParams, Texture};
 use tetra::input::*;
@@ -137,12 +139,11 @@ pub fn paint(ctx: &mut Context, meshes: Vec<ClippedMesh>, texture: &ETexture, ca
         }
 
         let tex = if let TextureId::User(x) = cm.1.texture_id {
-            let assets_folder = get_assets_folder();
-            let name = match x {
-                1 => "gold.png",
-                _ => "unimplemented.png",
+            let texture: TextureFile = match CustomTexture::try_from(x) {
+                Ok(ct) => ct.into(),
+                Err(_) => TextureFile::Unimplemented,
             };
-            Texture::new(ctx, assets_folder + name).unwrap()
+            Texture::new(ctx, &texture.to_string()).unwrap()
         } else {
             Texture::from_rgba(ctx, texture.width as i32, texture.height as i32, &fixed).unwrap()
         };

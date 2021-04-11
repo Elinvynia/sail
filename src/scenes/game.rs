@@ -3,7 +3,7 @@ use crate::entities::{generate_map, player};
 use crate::input::{key_to_dir, Dir};
 use crate::scenes::{PauseScene, Scene, SceneSwitch, Scenes};
 use crate::systems::{get_player_money, hover_system, render_system};
-use crate::utils::{position, TILE_SIZE};
+use crate::utils::{position, CustomTexture, Layer, TILE_SIZE};
 use crate::world::GameWorld;
 use egui::{pos2, vec2, CtxRef, TextureId, Window};
 use hecs::EntityBuilder;
@@ -27,7 +27,7 @@ impl GameScene {
 
         generate_map(map_width, map_height, world);
 
-        let position = Position::new(64, 64, 2);
+        let position = Position::new(256, 256, Layer::Player as u32);
         let player = player();
 
         let mut builder = EntityBuilder::new();
@@ -109,7 +109,7 @@ impl Scene for GameScene {
             .fixed_rect(rect)
             .show(ectx, |ui| {
                 ui.horizontal(|ui| {
-                    ui.image(TextureId::User(1), vec2(32.0, 32.0));
+                    ui.image(TextureId::User(CustomTexture::Gold.into()), vec2(32.0, 32.0));
                     let money = get_player_money(world);
                     ui.label(format!("Money: {}", money));
                 });

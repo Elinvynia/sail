@@ -1,6 +1,6 @@
 use crate::components::{Hoverable, Position};
 use crate::entities::{island, sea};
-use crate::utils::TILE_SIZE;
+use crate::utils::{Layer, TILE_SIZE};
 use crate::world::GameWorld;
 use hecs::EntityBuilder;
 use rand::prelude::*;
@@ -22,7 +22,7 @@ pub fn generate_map(width: u32, height: u32, world: &mut GameWorld) {
         x = 0;
         for _ in 0..width {
             let mut builder = EntityBuilder::new();
-            let pos = Position::new(x, y, 0);
+            let pos = Position::new(x, y, Layer::Background as u32);
 
             if rng.gen_ratio(island_prob, 100) && current_islands < MAX_ISLANDS {
                 let island = island();

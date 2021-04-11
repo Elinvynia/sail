@@ -3,7 +3,7 @@ use crate::world::GameWorld;
 
 pub fn get_player_money(world: &mut GameWorld) -> u64 {
     #[allow(clippy::never_loop)]
-    for (_id, (money, _player)) in world.ecs.query::<(&Money, &Player)>().iter().take(1) {
+    for (_id, (money, _player)) in world.ecs.query::<(&Money, &Player)>().iter() {
         return money.amount;
     }
 
