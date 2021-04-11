@@ -97,7 +97,7 @@ impl Scene for GameScene {
     fn draw(&mut self, world: &mut GameWorld, ctx: &mut Context, ectx: &mut CtxRef) -> tetra::Result {
         set_transform_matrix(ctx, self.camera.as_matrix());
         render_system(ctx, world);
-        hover_system(ctx, ectx, world);
+        hover_system(ctx, ectx, world, &self.camera);
 
         let top = self.camera.position.y - (self.height / 2) as f32 + 100.0;
         let left = self.camera.position.x - (self.width / 2) as f32 + 300.0;

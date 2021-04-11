@@ -1,4 +1,4 @@
-use crate::components::{Info, Money, Player, Sprite, TextureFile};
+use crate::components::{Hoverable, Info, Money, Player, Sprite, TextureFile};
 use hecs::Bundle;
 
 pub fn player() -> impl Bundle {
@@ -7,5 +7,6 @@ pub fn player() -> impl Bundle {
         Player,
         Sprite::new(vec![TextureFile::Ship]),
         Info::new("You!", "Arrr, this is you."),
+        Hoverable,
     )
 }

@@ -2,11 +2,12 @@ use crate::components::{Hoverable, Info, Position};
 use crate::utils::TILE_SIZE;
 use crate::world::GameWorld;
 use egui::{pos2, CtxRef, Id, Rect, Window};
-use tetra::input::{get_mouse_position, is_key_down, Key};
+use tetra::graphics::Camera;
+use tetra::input::{is_key_down, Key};
 use tetra::Context;
 
-pub fn hover_system(ctx: &mut Context, ectx: &mut CtxRef, world: &mut GameWorld) {
-    let mouse_pos = get_mouse_position(ctx);
+pub fn hover_system(ctx: &mut Context, ectx: &mut CtxRef, world: &mut GameWorld, camera: &Camera) {
+    let mouse_pos = camera.mouse_position(ctx);
 
     for (_id, (info, position, _h)) in world.ecs.query::<(&Info, &Position, &Hoverable)>().iter() {
         if !is_key_down(ctx, Key::LeftShift) {

@@ -1,4 +1,4 @@
-use crate::scenes::{Scene, SceneSwitch, Scenes, MenuScene};
+use crate::scenes::{MenuScene, Scene, SceneSwitch, Scenes};
 use crate::utils::center;
 use crate::world::GameWorld;
 use egui::*;
