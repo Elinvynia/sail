@@ -1,3 +1,5 @@
+[![ci-badge][]][ci]
+
 # Sail
 
 This is a cute and simple 2D game I am making for my girlfriend. You are a sailor, trading cargo with outposts and avoiding pirates. It's very Work In Progress, but I'm getting there.
@@ -7,3 +9,6 @@ This is a cute and simple 2D game I am making for my girlfriend. You are a sailo
 You need the SDL2.0 development libraries installed, follow the instructions [here](https://github.com/Rust-SDL2/rust-sdl2#sdl20-development-libraries).
 
 To statically link SDL2, you can use the `static` feature of this project.
+
+[ci]: https://github.com/Elinvynia/sail/actions?query=workflow%3ARust
+[ci-badge]: https://img.shields.io/github/workflow/status/Elinvynia/sail/Rust/master?style=flat-square
