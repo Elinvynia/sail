@@ -1,6 +1,6 @@
 # Sail
 
-W.I.P.
+This is a cute and simple 2D game I am making for my girlfriend. You are a sailor, trading cargo with outposts and avoiding pirates. It's very Work In Progress, but I'm getting there.
 
 ## Dependencies
 
