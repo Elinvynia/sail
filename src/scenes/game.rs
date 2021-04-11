@@ -99,10 +99,9 @@ impl Scene for GameScene {
         render_system(ctx, world);
         hover_system(ctx, ectx, world, &self.camera);
 
-        let top = self.camera.position.y - (self.height / 2) as f32 + 100.0;
-        let left = self.camera.position.x - (self.width / 2) as f32 + 300.0;
+        let pos = self.camera.project([100.0, 100.0].into());
 
-        let rect = position(pos2(left + 100.0, top + 100.0), vec2(150.0, 100.0));
+        let rect = position(pos2(pos.x, pos.y), vec2(150.0, 100.0));
         Window::new("Information")
             .resizable(false)
             .collapsible(false)
