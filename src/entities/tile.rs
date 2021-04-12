@@ -1,4 +1,4 @@
-use crate::components::{Info, Sprite, TextureFile};
+use crate::components::{Info, Island, Sprite, TextureFile};
 use hecs::Bundle;
 use rand::seq::SliceRandom;
 use rand::Rng;
@@ -28,5 +28,6 @@ pub fn island() -> impl Bundle {
     (
         Info::new(&name, "You can trade here!"),
         Sprite::new(vec![TextureFile::Island]),
+        Island,
     )
 }

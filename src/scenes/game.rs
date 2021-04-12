@@ -2,7 +2,7 @@ use crate::components::Position;
 use crate::entities::{generate_map, player};
 use crate::input::{key_to_dir, Dir};
 use crate::scenes::{PauseScene, Scene, SceneSwitch, Scenes};
-use crate::systems::{get_player_money, hover_system, render_system};
+use crate::systems::{get_player_inventory, get_player_money, hover_system, render_system};
 use crate::utils::{position, CustomTexture, Layer, TILE_SIZE};
 use crate::world::GameWorld;
 use egui::{pos2, vec2, CtxRef, TextureId, Window};
@@ -112,7 +112,15 @@ impl Scene for GameScene {
                     let money = get_player_money(world);
                     ui.label(format!("Money: {}", money));
                 });
-                ui.label("Useful information here.");
+
+                ui.separator();
+
+                for item in get_player_inventory(world).items.iter() {
+                    ui.horizontal(|ui| {
+                        ui.image(TextureId::User(CustomTexture::Unimplemented.into()), vec2(32.0, 32.0));
+                        ui.label(format!("{}: {}", item.name.to_string(), item.amount));
+                    });
+                }
             });
 
         Ok(())
