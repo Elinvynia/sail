@@ -1,5 +1,6 @@
 use tetra::input::Key;
 
+// Helper for directions, will need to be configurable later on.
 #[derive(Debug)]
 pub enum Dir {
     Up,

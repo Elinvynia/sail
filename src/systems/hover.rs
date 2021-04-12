@@ -6,6 +6,7 @@ use tetra::graphics::Camera;
 use tetra::input::{is_key_down, Key};
 use tetra::Context;
 
+// Displays a popup with information when hovering over certain things.
 pub fn hover_system(ctx: &mut Context, ectx: &mut CtxRef, world: &mut GameWorld, camera: &Camera) {
     let mouse_pos = camera.mouse_position(ctx);
 

@@ -1,6 +1,7 @@
 use crate::get_assets_folder;
 use std::fmt;
 
+// A sprite can be made from multiple textures (images in our case).
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Sprite {
     pub textures: Vec<TextureFile>,
@@ -12,7 +13,6 @@ impl Sprite {
     }
 }
 
-#[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum TextureFile {
     Unimplemented,
@@ -25,6 +25,7 @@ pub enum TextureFile {
     Gold,
 }
 
+// Displaying it into a string gives us the path to it.
 impl fmt::Display for TextureFile {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let folder = get_assets_folder();

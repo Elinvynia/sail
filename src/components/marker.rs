@@ -6,3 +6,6 @@ pub struct Player;
 
 #[derive(Debug)]
 pub struct Island;
+
+#[derive(Debug)]
+pub struct Sea;

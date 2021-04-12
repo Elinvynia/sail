@@ -7,6 +7,7 @@ use rand::prelude::*;
 
 const MAX_ISLANDS: u32 = 10;
 
+// Generates a random map, sprinkling islands into the sea.
 pub fn generate_map(width: u32, height: u32, world: &mut GameWorld) {
     let mut rng = rand::thread_rng();
 

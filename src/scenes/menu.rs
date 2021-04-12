@@ -5,6 +5,7 @@ use egui::*;
 use log::info;
 use tetra::{Context, Event};
 
+// The main menu of the game.
 #[derive(Debug, Default)]
 pub struct MenuScene {
     play_clicked: bool,

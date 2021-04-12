@@ -3,7 +3,7 @@ pub use info::Info;
 mod item;
 pub use item::{Inventory, Item, ItemName};
 mod marker;
-pub use marker::{Hoverable, Island, Player};
+pub use marker::{Hoverable, Island, Player, Sea};
 mod money;
 pub use money::Money;
 mod position;

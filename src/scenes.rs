@@ -49,11 +49,13 @@ impl SceneStack {
         Ok(())
     }
 
+    // Handles drawing the scenes.
     pub fn draw(&mut self, ctx: &mut Context, ectx: &mut CtxRef) -> tetra::Result {
         SceneStack::draw_scenes(&mut self.scenes, &mut self.world, ctx, ectx)?;
         Ok(())
     }
 
+    // Handles updating the actual scene logic.
     pub fn update(&mut self, ctx: &mut Context) -> tetra::Result {
         let change = {
             let current_scene = self.scenes.last_mut().expect("Tried to update empty scene stack.");
@@ -79,6 +81,7 @@ impl SceneStack {
         Ok(())
     }
 
+    // Handles events like pressing keys and mouse buttons.
     pub fn event(&mut self, ctx: &mut Context, event: Event) -> tetra::Result {
         let current_scene = self.scenes.last_mut().expect("Tried to do input for empty scene stack");
         current_scene.event(&mut self.world, ctx, event)?;

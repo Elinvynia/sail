@@ -1,6 +1,8 @@
 use crate::components::TextureFile;
 use std::convert::TryFrom;
 
+// Safety wrapper for egui User textures.
+// Egui stores custom textures as u64.
 #[derive(Debug)]
 pub enum CustomTexture {
     Unimplemented,

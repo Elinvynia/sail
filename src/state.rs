@@ -2,6 +2,8 @@ use crate::egui::{handle_event, render_ui};
 use crate::scenes::{MenuScene, SceneStack, Scenes};
 use crate::world::GameWorld;
 use egui::{CtxRef, RawInput};
+use std::collections::HashMap;
+use tetra::graphics::mesh::Mesh;
 use tetra::graphics::{clear, Color};
 use tetra::time::get_delta_time;
 use tetra::{Context, Event, State};
@@ -10,6 +12,7 @@ use tetra::{Context, Event, State};
 pub struct MainState {
     scenes: SceneStack,
     egui: CtxRef,
+    egui_cache: HashMap<String, Mesh>,
     input: RawInput,
 }
 
@@ -20,13 +23,19 @@ impl MainState {
         let scenes = SceneStack::new(world, Scenes::Menu(scene));
 
         let egui = CtxRef::default();
-
+        let egui_cache = HashMap::new();
         let input = RawInput::default();
 
-        Ok(MainState { scenes, egui, input })
+        Ok(MainState {
+            scenes,
+            egui,
+            egui_cache,
+            input,
+        })
     }
 }
 
+// Wrapper for egui, otherwise it just simply passes calls into the SceneStack.
 impl State for MainState {
     fn draw(&mut self, ctx: &mut Context) -> tetra::Result {
         clear(ctx, Color::rgb(0.8, 0.8, 0.95));
@@ -41,7 +50,7 @@ impl State for MainState {
         self.input.time = new;
         self.scenes.draw(ctx, &mut self.egui)?;
         let (_output, shapes) = self.egui.end_frame();
-        render_ui(ctx, &mut self.egui, &mut self.scenes.world.egui_cache, shapes);
+        render_ui(ctx, &mut self.egui, &mut self.egui_cache, shapes);
 
         Ok(())
     }

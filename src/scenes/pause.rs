@@ -6,6 +6,7 @@ use log::info;
 use tetra::input::Key;
 use tetra::{Context, Event};
 
+// The pause menu, giving the player time to chill.
 #[derive(Debug, Default)]
 pub struct PauseScene {
     resume: bool,
@@ -24,6 +25,7 @@ impl Scene for PauseScene {
             return Ok(SceneSwitch::Pop);
         }
 
+        // Quitting from the gave gives us just the default main menu.
         if self.quit {
             return Ok(SceneSwitch::ReplaceAll(Scenes::Menu(MenuScene::new(world, ctx))));
         }

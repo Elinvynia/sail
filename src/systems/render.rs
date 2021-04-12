@@ -3,6 +3,7 @@ use crate::world::GameWorld;
 use tetra::graphics::{DrawParams, Texture as TetraTexture};
 use tetra::Context;
 
+// Renders sprites, from the back to the front, respecting layer and texture order.
 pub fn render_system(ctx: &mut Context, world: &mut GameWorld) {
     let mut existing_z = vec![];
 

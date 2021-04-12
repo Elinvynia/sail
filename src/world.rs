@@ -1,7 +1,6 @@
 use crate::components::TextureFile;
 use hecs::World;
 use std::collections::HashMap;
-use tetra::graphics::mesh::Mesh;
 use tetra::graphics::Texture;
 
 // Mutable global state, used in every scene.
@@ -9,7 +8,6 @@ use tetra::graphics::Texture;
 pub struct GameWorld {
     pub ecs: World,
     pub textures: HashMap<TextureFile, Texture>,
-    pub egui_cache: HashMap<String, Mesh>,
 }
 
 impl GameWorld {

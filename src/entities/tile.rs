@@ -1,8 +1,9 @@
-use crate::components::{Info, Island, Sprite, TextureFile};
+use crate::components::{Info, Island, Sea, Sprite, TextureFile};
 use hecs::Bundle;
 use rand::seq::SliceRandom;
 use rand::Rng;
 
+// Creates a sea tile with randomized waves.
 pub fn sea() -> impl Bundle {
     let waves = match rand::thread_rng().gen_range(1..=3) {
         1 => TextureFile::Waves1,
@@ -11,12 +12,13 @@ pub fn sea() -> impl Bundle {
         _ => unreachable!(),
     };
 
-    (Sprite::new(vec![TextureFile::Sea, waves]),)
+    (Sprite::new(vec![TextureFile::Sea, waves]), Sea)
 }
 
 const ISLAND_ADJECTIVES: [&str; 1] = ["Deadly"];
 const ISLAND_NOUNS: [&str; 1] = ["Outpost"];
 
+// Creates an island with randomized name and (soon) randomized loot.
 pub fn island() -> impl Bundle {
     let mut rng = rand::thread_rng();
     let name = format!(
