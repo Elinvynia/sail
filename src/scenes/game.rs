@@ -8,7 +8,7 @@ use crate::world::GameWorld;
 use egui::{pos2, vec2, CtxRef, TextureId, Window};
 use hecs::EntityBuilder;
 use tetra::graphics::{set_transform_matrix, Camera};
-use tetra::input::{get_keys_down, Key};
+use tetra::input::{get_keys_down, get_keys_pressed, Key};
 use tetra::window::get_size;
 use tetra::{Context, Event};
 
@@ -68,6 +68,12 @@ impl Scene for GameScene {
             }
         }
 
+        for key in get_keys_pressed(ctx) {
+            if let Some(mdir) = key_to_movedir(key) {
+                tick(ctx, world, mdir)
+            }
+        }
+
         Ok(SceneSwitch::None)
     }
 
@@ -107,10 +113,6 @@ impl Scene for GameScene {
         if let Event::KeyPressed { key } = event {
             if key == Key::Escape {
                 self.pause = true;
-            }
-
-            if let Some(mdir) = key_to_movedir(&key) {
-                tick(mdir)
             }
         }
 

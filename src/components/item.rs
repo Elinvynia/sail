@@ -23,7 +23,7 @@ impl Inventory {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ItemName {
     Rum,
     Bananas,

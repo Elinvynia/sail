@@ -22,11 +22,7 @@ impl MainState {
         let egui = CtxRef::default();
         let input = RawInput::default();
 
-        Ok(MainState {
-            scenes,
-            egui,
-            input,
-        })
+        Ok(MainState { scenes, egui, input })
     }
 }
 
