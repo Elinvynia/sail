@@ -2,8 +2,6 @@ use crate::egui::{handle_event, render_ui};
 use crate::scenes::{MenuScene, SceneStack, Scenes};
 use crate::world::GameWorld;
 use egui::{pos2, CtxRef, RawInput};
-use std::collections::HashMap;
-use tetra::graphics::mesh::Mesh;
 use tetra::graphics::{clear, Color};
 use tetra::time::get_delta_time;
 use tetra::{Context, Event, State};
@@ -12,7 +10,6 @@ use tetra::{Context, Event, State};
 pub struct MainState {
     scenes: SceneStack,
     egui: CtxRef,
-    egui_cache: HashMap<String, Mesh>,
     input: RawInput,
 }
 
@@ -23,13 +20,11 @@ impl MainState {
         let scenes = SceneStack::new(world, Scenes::Menu(scene));
 
         let egui = CtxRef::default();
-        let egui_cache = HashMap::new();
         let input = RawInput::default();
 
         Ok(MainState {
             scenes,
             egui,
-            egui_cache,
             input,
         })
     }
@@ -50,7 +45,7 @@ impl State for MainState {
         self.input.time = new;
         self.scenes.draw(ctx, &mut self.egui)?;
         let (_output, shapes) = self.egui.end_frame();
-        render_ui(ctx, &mut self.egui, &mut self.egui_cache, shapes);
+        render_ui(ctx, &mut self.egui, shapes);
 
         Ok(())
     }

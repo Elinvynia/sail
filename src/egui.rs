@@ -3,19 +3,18 @@ use crate::utils::CustomTexture;
 use egui::paint::ClippedShape;
 use egui::{ClippedMesh, CtxRef, Event, Modifiers, Pos2, RawInput};
 use egui::{PointerButton, Texture as ETexture, TextureId, Vec2 as EVec2};
-use std::collections::HashMap;
 use std::convert::TryFrom;
-use tetra::graphics::mesh::{IndexBuffer, Mesh, Vertex, VertexBuffer, VertexWinding};
+use tetra::graphics::mesh::{IndexBuffer, Vertex, VertexBuffer, VertexWinding};
 use tetra::graphics::{Color, DrawParams, Texture};
 use tetra::input::*;
 use tetra::math::Vec2;
 use tetra::{Context, Event as TEvent};
 
 // Paint the frame.
-pub fn render_ui(ctx: &mut Context, ectx: &mut CtxRef, cache: &mut HashMap<String, Mesh>, shapes: Vec<ClippedShape>) {
+pub fn render_ui(ctx: &mut Context, ectx: &mut CtxRef, shapes: Vec<ClippedShape>) {
     let texture = ectx.texture();
     let clipped_meshes = ectx.tessellate(shapes);
-    paint(ctx, clipped_meshes, texture.as_ref(), cache);
+    paint(ctx, clipped_meshes, texture.as_ref());
 }
 
 // Process tetra Events into egui Events
@@ -109,13 +108,8 @@ pub fn handle_event(ctx: &mut Context, ri: &mut RawInput, event: &TEvent, pos_ov
 }
 
 // Paint the GUI using tetra.
-pub fn paint(ctx: &mut Context, meshes: Vec<ClippedMesh>, texture: &ETexture, cache: &mut HashMap<String, Mesh>) {
+pub fn paint(ctx: &mut Context, meshes: Vec<ClippedMesh>, texture: &ETexture) {
     for cm in meshes.into_iter() {
-        if let Some(m) = cache.get(&format!("{:?}", cm)) {
-            m.draw(ctx, DrawParams::default());
-            continue;
-        }
-
         let mut verts = vec![];
 
         // Convert egui::Vertex into tetra::Vertex
@@ -161,8 +155,6 @@ pub fn paint(ctx: &mut Context, meshes: Vec<ClippedMesh>, texture: &ETexture, ca
         mesh.set_front_face_winding(VertexWinding::Clockwise);
         mesh.set_texture(tex);
         mesh.draw(ctx, DrawParams::default());
-
-        cache.insert(format!("{:?}", cm), mesh);
     }
 }
 
