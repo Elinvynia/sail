@@ -1,6 +1,6 @@
 use crate::components::Position;
 use crate::entities::{generate_map, player};
-use crate::input::{key_to_dir, Dir};
+use crate::input::{key_to_cameradir, key_to_movedir};
 use crate::scenes::{PauseScene, Scene, SceneSwitch, Scenes};
 use crate::systems::{get_player_inventory, get_player_money, hover_system, render_system};
 use crate::utils::{position, CustomTexture, Layer, TILE_SIZE};
@@ -12,12 +12,17 @@ use tetra::input::{get_keys_down, Key};
 use tetra::window::get_size;
 use tetra::{Context, Event};
 
+mod camera;
+use camera::move_camera;
+mod tick;
+use tick::tick;
+
 #[derive(Debug)]
 pub struct GameScene {
-    pause: bool,
-    camera: Camera,
+    pub(crate) camera: Camera,
     width: i32,
     height: i32,
+    pause: bool,
 }
 
 impl GameScene {
@@ -58,36 +63,8 @@ impl Scene for GameScene {
         }
 
         for key in get_keys_down(ctx) {
-            if let Some(dir) = key_to_dir(key) {
-                let (width, height) = get_size(ctx);
-                match dir {
-                    Dir::Up => {
-                        let top = self.camera.position.y - (height / 2) as f32;
-                        if top - 5.0 > 0.0 {
-                            self.camera.position.y -= 5.0;
-                        }
-                    }
-                    Dir::Down => {
-                        let bottom = self.camera.position.y + (height / 2) as f32;
-                        if bottom + 5.0 < self.height as f32 {
-                            self.camera.position.y += 5.0;
-                        }
-                    }
-                    Dir::Left => {
-                        let left = self.camera.position.x - (width / 2) as f32;
-                        if left - 5.0 > 0.0 {
-                            self.camera.position.x -= 5.0;
-                        }
-                    }
-                    Dir::Right => {
-                        let right = self.camera.position.x + (width / 2) as f32;
-                        if right + 5.0 < self.width as f32 {
-                            self.camera.position.x += 5.0;
-                        }
-                    }
-                }
-
-                self.camera.update();
+            if let Some(dir) = key_to_cameradir(key) {
+                move_camera(ctx, self, dir);
             }
         }
 
@@ -104,7 +81,6 @@ impl Scene for GameScene {
         let rect = position(pos2(pos.x, pos.y), vec2(150.0, 100.0));
         Window::new("Information")
             .resizable(false)
-            .collapsible(false)
             .fixed_rect(rect)
             .show(ectx, |ui| {
                 ui.horizontal(|ui| {
@@ -117,7 +93,8 @@ impl Scene for GameScene {
 
                 for item in get_player_inventory(world).items.iter() {
                     ui.horizontal(|ui| {
-                        ui.image(TextureId::User(CustomTexture::Unimplemented.into()), vec2(32.0, 32.0));
+                        let texture: CustomTexture = item.name.into();
+                        ui.image(TextureId::User(texture.into()), vec2(32.0, 32.0));
                         ui.label(format!("{}: {}", item.name.to_string(), item.amount));
                     });
                 }
@@ -130,6 +107,10 @@ impl Scene for GameScene {
         if let Event::KeyPressed { key } = event {
             if key == Key::Escape {
                 self.pause = true;
+            }
+
+            if let Some(mdir) = key_to_movedir(&key) {
+                tick(mdir)
             }
         }
 

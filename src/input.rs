@@ -1,20 +1,37 @@
 use tetra::input::Key;
 
-// Helper for directions, will need to be configurable later on.
 #[derive(Debug)]
-pub enum Dir {
+pub enum CameraDir {
     Up,
     Down,
     Left,
     Right,
 }
 
-pub fn key_to_dir(key: &Key) -> Option<Dir> {
+pub fn key_to_cameradir(key: &Key) -> Option<CameraDir> {
     match key {
-        Key::W => Some(Dir::Up),
-        Key::S => Some(Dir::Down),
-        Key::A => Some(Dir::Left),
-        Key::D => Some(Dir::Right),
+        Key::Up => Some(CameraDir::Up),
+        Key::Down => Some(CameraDir::Down),
+        Key::Left => Some(CameraDir::Left),
+        Key::Right => Some(CameraDir::Right),
+        _ => None,
+    }
+}
+
+#[derive(Debug)]
+pub enum MoveDir {
+    Up,
+    Down,
+    Left,
+    Right,
+}
+
+pub fn key_to_movedir(key: &Key) -> Option<MoveDir> {
+    match key {
+        Key::W => Some(MoveDir::Up),
+        Key::S => Some(MoveDir::Down),
+        Key::A => Some(MoveDir::Left),
+        Key::D => Some(MoveDir::Right),
         _ => None,
     }
 }

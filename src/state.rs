@@ -1,7 +1,7 @@
 use crate::egui::{handle_event, render_ui};
 use crate::scenes::{MenuScene, SceneStack, Scenes};
 use crate::world::GameWorld;
-use egui::{CtxRef, RawInput};
+use egui::{pos2, CtxRef, RawInput};
 use std::collections::HashMap;
 use tetra::graphics::mesh::Mesh;
 use tetra::graphics::{clear, Color};
@@ -61,7 +61,15 @@ impl State for MainState {
     }
 
     fn event(&mut self, ctx: &mut Context, event: Event) -> tetra::Result {
-        handle_event(ctx, &mut self.input, &event);
+        let pos = match self.scenes.scenes.last() {
+            Some(Scenes::Game(gs)) => {
+                let pos = gs.camera.mouse_position(ctx);
+                Some(pos2(pos.x, pos.y))
+            }
+            _ => None,
+        };
+
+        handle_event(ctx, &mut self.input, &event, pos);
         self.scenes.event(ctx, event)?;
         Ok(())
     }

@@ -19,8 +19,11 @@ pub fn render_ui(ctx: &mut Context, ectx: &mut CtxRef, cache: &mut HashMap<Strin
 }
 
 // Process tetra Events into egui Events
-pub fn handle_event(ctx: &mut Context, ri: &mut RawInput, event: &TEvent) {
-    let pos = Pos2::new(get_mouse_x(ctx), get_mouse_y(ctx));
+pub fn handle_event(ctx: &mut Context, ri: &mut RawInput, event: &TEvent, pos_override: Option<Pos2>) {
+    let pos = match pos_override {
+        Some(p) => p,
+        None => Pos2::new(get_mouse_x(ctx), get_mouse_y(ctx)),
+    };
     let mut modifiers = Modifiers::default();
 
     if is_key_modifier_down(ctx, KeyModifier::Ctrl) {
@@ -86,7 +89,10 @@ pub fn handle_event(ctx: &mut Context, ri: &mut RawInput, event: &TEvent) {
             }
         }
         TEvent::MouseMoved { position, .. } => {
-            let p = Pos2::new(position.x, position.y);
+            let p = match pos_override {
+                Some(p) => p,
+                None => Pos2::new(position.x, position.y),
+            };
             ri.events.push(Event::PointerMoved(p));
         }
         TEvent::MouseWheelMoved { amount } => {

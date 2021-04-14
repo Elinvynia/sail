@@ -23,6 +23,9 @@ pub enum TextureFile {
     Island,
     Ship,
     Gold,
+    Bananas,
+    Rum,
+    Water,
 }
 
 // Displaying it into a string gives us the path to it.
@@ -40,6 +43,9 @@ impl fmt::Display for TextureFile {
             Island => "island.png",
             Ship => "ship.png",
             Gold => "gold.png",
+            Bananas => "bananas.png",
+            Rum => "rum.png",
+            Water => "water.png",
         };
 
         write!(f, "{}{}", folder, file)
