@@ -12,6 +12,8 @@ mod options;
 pub use options::OptionsScene;
 mod pause;
 pub use pause::PauseScene;
+mod trade;
+pub use trade::TradeScene;
 
 // Holds the stack of scenes and takes care of actual logic.
 pub struct SceneStack {
@@ -119,6 +121,7 @@ pub enum Scenes {
     Options(OptionsScene),
     Pause(PauseScene),
     End(EndScene),
+    Trade(TradeScene),
 }
 
 // Failing to add a new scene here will result in a compilation error.
@@ -130,6 +133,7 @@ impl Scene for Scenes {
             Scenes::Options(s) => s.update(world, ctx),
             Scenes::Pause(s) => s.update(world, ctx),
             Scenes::End(s) => s.update(world, ctx),
+            Scenes::Trade(s) => s.update(world, ctx),
         }
     }
 
@@ -140,6 +144,7 @@ impl Scene for Scenes {
             Scenes::Options(s) => s.draw(world, ctx, ectx),
             Scenes::Pause(s) => s.draw(world, ctx, ectx),
             Scenes::End(s) => s.draw(world, ctx, ectx),
+            Scenes::Trade(s) => s.draw(world, ctx, ectx),
         }
     }
 
@@ -150,6 +155,7 @@ impl Scene for Scenes {
             Scenes::Options(s) => s.event(world, ctx, event),
             Scenes::Pause(s) => s.event(world, ctx, event),
             Scenes::End(s) => s.event(world, ctx, event),
+            Scenes::Trade(s) => s.event(world, ctx, event),
         }
     }
 
@@ -160,6 +166,7 @@ impl Scene for Scenes {
             Scenes::Options(s) => s.draw_previous(),
             Scenes::Pause(s) => s.draw_previous(),
             Scenes::End(s) => s.draw_previous(),
+            Scenes::Trade(s) => s.draw_previous(),
         }
     }
 }

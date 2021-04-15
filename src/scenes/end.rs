@@ -5,7 +5,7 @@ use egui::*;
 use log::info;
 use tetra::{Context, Event};
 
-// The pause menu, giving the player time to chill.
+// The game over menu, should have some stats later on.
 #[derive(Debug, Default)]
 pub struct EndScene {
     quit: bool,

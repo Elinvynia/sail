@@ -1,6 +1,6 @@
-use crate::components::{Inventory, ItemName, Player, Position, Sea};
+use crate::components::{Inventory, Island, ItemName, Player, Position, Sea};
 use crate::input::MoveDir;
-use crate::scenes::{EndScene, SceneSwitch, Scenes};
+use crate::scenes::{EndScene, SceneSwitch, Scenes, TradeScene};
 use crate::utils::TILE_SIZE;
 use crate::world::GameWorld;
 
@@ -19,17 +19,28 @@ pub fn move_player(world: &mut GameWorld, mdir: MoveDir) -> Option<SceneSwitch> 
 
     for (_id, (position, inventory, _player)) in world.ecs.query::<(&mut Position, &mut Inventory, &Player)>().iter() {
         // Find out if sea is at the desired position.
-        let mut ok = false;
+        let mut sea = false;
         for (_id, (pos, _sea)) in world.ecs.query::<(&Position, &Sea)>().iter() {
             if pos.x == target_pos.0 && pos.y == target_pos.1 {
-                ok = true;
+                sea = true;
+            }
+        }
+
+        // Or an island.
+        let mut island = false;
+        for (_id, (pos, _island)) in world.ecs.query::<(&Position, &Island)>().iter() {
+            if pos.x == target_pos.0 && pos.y == target_pos.1 {
+                island = true;
             }
         }
 
         // If so, move us there.
-        if ok {
+        if sea {
             position.x = target_pos.0;
             position.y = target_pos.1;
+        } else if island {
+            let scene = Scenes::Trade(TradeScene::new());
+            return Some(SceneSwitch::Push(scene));
         } else {
             break;
         }
