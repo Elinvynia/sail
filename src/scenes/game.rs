@@ -70,7 +70,9 @@ impl Scene for GameScene {
 
         for key in get_keys_pressed(ctx) {
             if let Some(mdir) = key_to_movedir(key) {
-                tick(ctx, world, mdir)
+                if let Some(ss) = tick(ctx, world, mdir) {
+                    return Ok(ss);
+                }
             }
         }
 

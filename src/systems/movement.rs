@@ -1,9 +1,10 @@
 use crate::components::{Inventory, ItemName, Player, Position, Sea};
 use crate::input::MoveDir;
+use crate::scenes::{EndScene, SceneSwitch, Scenes};
 use crate::utils::TILE_SIZE;
 use crate::world::GameWorld;
 
-pub fn move_player(world: &mut GameWorld, mdir: MoveDir) {
+pub fn move_player(world: &mut GameWorld, mdir: MoveDir) -> Option<SceneSwitch> {
     // Find out where we want to move the player.
     let mut target_pos = (0, 0);
     for (_id, (position, _player)) in world.ecs.query::<(&Position, &Player)>().iter() {
@@ -37,8 +38,16 @@ pub fn move_player(world: &mut GameWorld, mdir: MoveDir) {
         for item in inventory.items.iter_mut() {
             if item.name == ItemName::Water {
                 item.amount -= 1;
+
+                if item.amount == 0 {
+                    let scene = Scenes::End(EndScene::new());
+                    return Some(SceneSwitch::ReplaceAll(scene));
+                }
+
                 break;
             }
         }
     }
+
+    None
 }
