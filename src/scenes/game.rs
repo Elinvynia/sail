@@ -7,7 +7,7 @@ use crate::utils::{position, CustomTexture, Layer, TILE_SIZE};
 use crate::world::GameWorld;
 use egui::{pos2, vec2, CtxRef, TextureId, Window};
 use hecs::EntityBuilder;
-use tetra::graphics::{set_transform_matrix, Camera};
+use tetra::graphics::set_transform_matrix;
 use tetra::input::{get_keys_down, get_keys_pressed, Key};
 use tetra::window::get_size;
 use tetra::{Context, Event};
@@ -19,7 +19,6 @@ use tick::tick;
 
 #[derive(Debug)]
 pub struct GameScene {
-    pub(crate) camera: Camera,
     width: i32,
     height: i32,
     pause: bool,
@@ -41,13 +40,11 @@ impl GameScene {
 
         world.ecs.spawn(builder.build());
 
-        let mut camera = Camera::with_window_size(ctx);
-        camera.position = [width as f32 / 2.0, height as f32 / 2.0].into();
-        camera.update();
+        world.camera.position = [width as f32 / 2.0, height as f32 / 2.0].into();
+        world.camera.update();
 
         GameScene {
             pause: false,
-            camera,
             width: (map_width * TILE_SIZE) as i32,
             height: (map_height * TILE_SIZE) as i32,
         }
@@ -64,7 +61,7 @@ impl Scene for GameScene {
 
         for key in get_keys_down(ctx) {
             if let Some(dir) = key_to_cameradir(key) {
-                move_camera(ctx, self, dir);
+                move_camera(ctx, &mut world.camera, self, dir);
             }
         }
 
@@ -80,11 +77,11 @@ impl Scene for GameScene {
     }
 
     fn draw(&mut self, world: &mut GameWorld, ctx: &mut Context, ectx: &mut CtxRef) -> tetra::Result {
-        set_transform_matrix(ctx, self.camera.as_matrix());
+        set_transform_matrix(ctx, world.camera.as_matrix());
         render_system(ctx, world);
-        hover_system(ctx, ectx, world, &self.camera);
+        hover_system(ctx, ectx, &world.ecs, &world.camera);
 
-        let pos = self.camera.project([100.0, 100.0].into());
+        let pos = world.camera.project([100.0, 100.0].into());
 
         let rect = position(pos2(pos.x, pos.y), vec2(150.0, 100.0));
         Window::new("Information")

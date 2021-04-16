@@ -27,10 +27,10 @@ pub fn move_player(world: &mut GameWorld, mdir: MoveDir) -> Option<SceneSwitch> 
         }
 
         // Or an island.
-        let mut island = false;
-        for (_id, (pos, _island)) in world.ecs.query::<(&Position, &Island)>().iter() {
+        let mut island = None;
+        for (id, (pos, _island)) in world.ecs.query::<(&Position, &Island)>().iter() {
             if pos.x == target_pos.0 && pos.y == target_pos.1 {
-                island = true;
+                island = Some(id);
             }
         }
 
@@ -38,8 +38,8 @@ pub fn move_player(world: &mut GameWorld, mdir: MoveDir) -> Option<SceneSwitch> 
         if sea {
             position.x = target_pos.0;
             position.y = target_pos.1;
-        } else if island {
-            let scene = Scenes::Trade(TradeScene::new());
+        } else if island.is_some() {
+            let scene = Scenes::Trade(TradeScene::new(island.unwrap()));
             return Some(SceneSwitch::Push(scene));
         } else {
             break;

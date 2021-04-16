@@ -15,7 +15,7 @@ pub struct MainState {
 
 impl MainState {
     pub fn new(ctx: &mut Context) -> tetra::Result<Self> {
-        let mut world = GameWorld::new();
+        let mut world = GameWorld::new(ctx);
         let scene = MenuScene::new(&mut world, ctx);
         let scenes = SceneStack::new(world, Scenes::Menu(scene));
 
@@ -52,9 +52,9 @@ impl State for MainState {
     }
 
     fn event(&mut self, ctx: &mut Context, event: Event) -> tetra::Result {
-        let pos = match self.scenes.scenes.last() {
-            Some(Scenes::Game(gs)) => {
-                let pos = gs.camera.mouse_position(ctx);
+        let pos = match self.scenes.scenes.iter().find(|x| matches!(x, Scenes::Game(_))) {
+            Some(_) => {
+                let pos = self.scenes.world.camera.mouse_position(ctx);
                 Some(pos2(pos.x, pos.y))
             }
             _ => None,

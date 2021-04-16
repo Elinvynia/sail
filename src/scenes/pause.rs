@@ -1,9 +1,10 @@
 use crate::scenes::{MenuScene, Scene, SceneSwitch, Scenes};
-use crate::utils::center;
+use crate::utils::position;
 use crate::world::GameWorld;
-use egui::*;
+use egui::{pos2, vec2, Button, CtxRef, Window};
 use log::info;
 use tetra::input::Key;
+use tetra::window::get_size;
 use tetra::{Context, Event};
 
 // The pause menu, giving the player time to chill.
@@ -33,8 +34,10 @@ impl Scene for PauseScene {
         Ok(SceneSwitch::None)
     }
 
-    fn draw(&mut self, _world: &mut GameWorld, ctx: &mut Context, ectx: &mut CtxRef) -> tetra::Result {
-        let rect = center(ctx, vec2(250.0, 350.0));
+    fn draw(&mut self, world: &mut GameWorld, ctx: &mut Context, ectx: &mut CtxRef) -> tetra::Result {
+        let (width, height) = get_size(ctx);
+        let pos = world.camera.project([(width / 2) as f32, (height / 2) as f32].into());
+        let rect = position(pos2(pos.x, pos.y), vec2(250.0, 350.0));
 
         Window::new("Pause")
             .resize(|r| r.with_stroke(true))

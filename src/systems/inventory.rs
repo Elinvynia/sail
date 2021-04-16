@@ -1,5 +1,6 @@
 use crate::components::{Inventory, Player};
 use crate::world::GameWorld;
+use hecs::Entity;
 
 // Returns the player inventory, assumes there is one and just one.
 pub fn get_player_inventory(world: &mut GameWorld) -> Inventory {
@@ -13,4 +14,9 @@ pub fn get_player_inventory(world: &mut GameWorld) -> Inventory {
     }
 
     panic!("Player does not exist!")
+}
+
+// Returns the inventory of an island.
+pub fn get_island_inventory(world: &mut GameWorld, entity: Entity) -> Inventory {
+    (*world.ecs.get::<Inventory>(entity).unwrap()).clone()
 }
